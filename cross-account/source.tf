@@ -160,7 +160,7 @@ resource "aws_s3_bucket" "source" {
     role = aws_iam_role.replication.arn
 
     rules {
-      prefix = ""
+      prefix = "dev"
       status = "Enabled"
 
       destination {
@@ -180,7 +180,7 @@ resource "aws_s3_bucket" "source" {
     {
       "Name" = "Source Bucket"
     },
-    var.tags,
+    var.tags
   )
 }
 
@@ -189,7 +189,7 @@ resource "aws_s3_bucket" "source" {
 # ------------------------------------------------------------------------------
 resource "aws_s3_bucket_object" "sample" {
   provider     = aws.source
-  key          = "sample.txt"
+  key          = "dev/sample.txt"
   bucket       = aws_s3_bucket.source.id
   source       = "${path.module}/sample.txt"
   content_type = "text/plain"

@@ -48,12 +48,21 @@ resource "aws_kms_alias" "destination" {
   target_key_id = aws_kms_key.destination.key_id
 }
 
+
+//resource "aws_s3_bucket_acl" "destination" {
+//  provider = aws.dest
+//  bucket = aws_s3_bucket.destination.id 
+//  acl = "private"
+//}
+
 # ------------------------------------------------------------------------------
 # S3 bucket to act as the replication target.
 # ------------------------------------------------------------------------------
 resource "aws_s3_bucket" "destination" {
   provider      = aws.dest
   bucket_prefix = var.bucket_prefix
+
+  // disable here, move to aws_s3_bucket_acl resource
   acl           = "private"
 
   versioning {

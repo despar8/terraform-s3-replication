@@ -1,13 +1,13 @@
 variable "tags" {
   default = {
-    "owner"   = "rahook"
-    "project" = "s3-replication"
-    "client"  = "Internal"
+    "owner"   = "david.shea"
+    "project" = "SPF-s3-replication"
+    "client"  = "Arcade"
   }
 }
 
 variable "bucket_prefix" {
-  default = "crr-example"
+  default = "spf-test"
 }
 
 variable "source_account" {
@@ -27,7 +27,7 @@ variable "dest_account" {
 }
 
 variable "dest_region" {
-  default = "eu-west-1"
+  default = "us-west-2"
 }
 
 variable "dest_profile" {
