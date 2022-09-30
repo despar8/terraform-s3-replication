@@ -65,6 +65,8 @@ resource "aws_s3_bucket" "destination" {
   // disable here, move to aws_s3_bucket_acl resource
   acl           = "private"
 
+  force_destroy = true
+
   versioning {
     enabled = true
   }

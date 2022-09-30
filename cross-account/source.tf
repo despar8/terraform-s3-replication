@@ -146,6 +146,8 @@ resource "aws_s3_bucket" "source" {
     prevent_destroy = false
   }
 
+  force_destroy = true
+
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -195,4 +197,3 @@ resource "aws_s3_bucket_object" "sample" {
   content_type = "text/plain"
   etag         = filemd5("${path.module}/sample.txt")
 }
-
