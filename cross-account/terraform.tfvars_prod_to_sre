@@ -1,0 +1,7 @@
+source_region = "us-west-2"
+source_profile = "PROD"
+source_account = "961211348833"
+
+dest_region = "us-west-2"
+dest_profile = "SRE"
+dest_account = "541420744399"
