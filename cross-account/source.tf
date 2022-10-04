@@ -1,27 +1,47 @@
 # ------------------------------------------------------------------------------
 # IAM role that S3 can use to read our bucket for replication
+#
+#    **** THis construct with INLINE works!
 # ------------------------------------------------------------------------------
+// resource "aws_iam_role" "replication" {
+//   provider    = aws.source
+//   name_prefix = "replication"
+//   description = "Allow S3 to assume the role for replication"
+//
+//   assume_role_policy = <<POLICY
+// {
+//   "Version": "2012-10-17",
+//   "Statement": [
+//     {
+//       "Sid": "s3ReplicationAssume",
+//       "Effect": "Allow",
+//       "Principal": {
+//         "Service": "s3.amazonaws.com"
+//       },
+//       "Action": "sts:AssumeRole"
+//     }
+//   ]
+// }
+// POLICY
+//
+// }
+
 resource "aws_iam_role" "replication" {
-  provider    = aws.source
-  name_prefix = "replication"
-  description = "Allow S3 to assume the role for replication"
-
-  assume_role_policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "s3ReplicationAssume",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "s3.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
+  provider      =  aws.source
+  name          =  "replication"
+  assume_role_policy = data.aws_iam_policy_document.replication-assume-role-policy.json
 }
-POLICY
 
+data "aws_iam_policy_document" "replication-assume-role-policy" {
+  provider      =  aws.source
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+    principals {
+      type        =  "Service"
+      identifiers =  ["s3.amazonaws.com"]
+    }
+  }
 }
 
 resource "aws_iam_policy" "replication" {
