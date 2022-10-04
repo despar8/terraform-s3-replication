@@ -1,3 +1,27 @@
+//resource "aws_iam_role" "addepar-us-pipeline-artifacts-replication" {
+//  provider = aws.dest
+//  name     = "destinarion-replication"
+//
+//  assume_role_policy = data.aws_iam_policy_document.destination-replication-assume-role-policy.json
+//}
+
+data "aws_iam_policy_document" "destination-replication-assume-role-policy" {
+  provider = aws.dest
+
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = [
+        "s3.amazonaws.com",
+        "batchoperations.s3.amazonaws.com"
+      ]
+    }
+  }
+}
+
 # ------------------------------------------------------------------------------
 # KMS key for server side encryption on the destination bucket
 # ------------------------------------------------------------------------------
@@ -54,6 +78,26 @@ resource "aws_kms_alias" "destination" {
 //  bucket = aws_s3_bucket.destination.id 
 //  acl = "private"
 //}
+
+
+//
+//  @TODO
+//  The bucket setup fails with this block activated ... why?
+//
+//// ISR and SecEng request we block S3 public access
+////
+//// this is new and needs testing before hitting prod
+////
+//resource "aws_s3_bucket_public_access_block" "destination_access_block" {
+//  bucket = aws_s3_bucket.destination.id
+//
+//  block_public_acls       = true
+//  block_public_policy     = true
+//  ignore_public_acls      = true
+//  restrict_public_buckets = true
+//}
+//
+
 
 # ------------------------------------------------------------------------------
 # S3 bucket to act as the replication target.
@@ -127,7 +171,7 @@ resource "aws_s3_bucket_policy" "destination" {
       "Sid": "AllowRead",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "*"
+        "AWS": "arn:aws:iam::${var.source_account}:root"
       },
       "Action": [
         "s3:List*",

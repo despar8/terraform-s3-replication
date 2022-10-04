@@ -164,10 +164,19 @@ resource "aws_s3_bucket" "source" {
     rules {
       prefix = "dev"
       status = "Enabled"
+      priority = 1
 
       destination {
         bucket             = aws_s3_bucket.destination.arn
         replica_kms_key_id = aws_kms_key.destination.arn
+
+        // to enable object ownership by destination account
+        // documentation says we need both of these
+        account_id         = var.dest_account
+        //access_control_translation {
+        //  owner = "Destination"
+        //}
+
       }
 
       source_selection_criteria {
