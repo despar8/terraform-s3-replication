@@ -84,23 +84,6 @@ resource "aws_iam_policy" "replication" {
     },
     {
       "Action": [
-        "kms:Decrypt"
-      ],
-      "Effect": "Allow",
-      "Condition": {
-        "StringLike": {
-          "kms:ViaService": "s3.${var.source_region}.amazonaws.com",
-          "kms:EncryptionContext:aws:s3:arn": [
-            "${aws_s3_bucket.source.arn}"
-          ]
-        }
-      },
-      "Resource": [
-        "${aws_kms_key.source.arn}"
-      ]
-    },
-    {
-      "Action": [
         "kms:Encrypt"
       ],
       "Effect": "Allow",
@@ -129,26 +112,26 @@ resource "aws_iam_policy_attachment" "replication" {
   policy_arn = aws_iam_policy.replication.arn
 }
 
-# ------------------------------------------------------------------------------
-# Key for server side encryption on the source bucket
-# ------------------------------------------------------------------------------
-resource "aws_kms_key" "source" {
-  provider                = aws.source
-  deletion_window_in_days = 7
+// # ------------------------------------------------------------------------------
+// # Key for server side encryption on the source bucket
+// # ------------------------------------------------------------------------------
+// resource "aws_kms_key" "source" {
+//   provider                = aws.source
+//   deletion_window_in_days = 7
+//
+//   tags = merge(
+//     {
+//       "Name" = "source_data"
+//     },
+//     var.tags,
+//   )
+// }
 
-  tags = merge(
-    {
-      "Name" = "source_data"
-    },
-    var.tags,
-  )
-}
-
-resource "aws_kms_alias" "source" {
-  provider      = aws.source
-  name          = "alias/source"
-  target_key_id = aws_kms_key.source.key_id
-}
+// resource "aws_kms_alias" "source" {
+//   provider      = aws.source
+//   name          = "alias/source"
+//   target_key_id = aws_kms_key.source.key_id
+// }
 
 #---------------------------------------------
 # Move lifecycle out of aws_s3_bucket
