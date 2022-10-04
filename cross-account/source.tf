@@ -169,6 +169,20 @@ resource "aws_s3_bucket_lifecycle_configuration" "source_lifecycle" {
   }
 }
 
+#---------------------------------------------
+# Move lifecycle out of aws_s3_bucket
+#---------------------------------------------
+resource "aws_s3_bucket_server_side_encryption_configuration" "source-encryption" {
+  provider  =  aws.source
+  bucket    =  aws_s3_bucket.source.bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm   =  "AES256"
+    }
+  }
+}
+
 # ------------------------------------------------------------------------------
 # S3 bucket to act as the replication source, i.e. the primary copy of the data
 # ------------------------------------------------------------------------------
@@ -187,15 +201,15 @@ resource "aws_s3_bucket" "source" {
 
   force_destroy = true
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        // kms_master_key_id = aws_kms_key.source.arn
-        // sse_algorithm     = "aws:kms"
-        sse_algorithm     = "AES256"
-      }
-    }
-  }
+  // server_side_encryption_configuration {
+  //   rule {
+  //     apply_server_side_encryption_by_default {
+  //       // kms_master_key_id = aws_kms_key.source.arn
+  //       // sse_algorithm     = "aws:kms"
+  //       sse_algorithm     = "AES256"
+  //     }
+  //   }
+  // }
 
   replication_configuration {
     role = aws_iam_role.replication.arn
