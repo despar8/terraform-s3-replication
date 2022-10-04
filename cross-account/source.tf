@@ -150,6 +150,25 @@ resource "aws_kms_alias" "source" {
   target_key_id = aws_kms_key.source.key_id
 }
 
+#---------------------------------------------
+# Move lifecycle out of aws_s3_bucket
+#---------------------------------------------
+resource "aws_s3_bucket_lifecycle_configuration" "source_lifecycle" {
+  provider   =  aws.source
+  bucket     =  aws_s3_bucket.source.bucket
+  rule {
+    id       =  "expire_noncurrent_versions"
+
+    filter {
+      prefix = "/dev"
+    }
+    expiration {
+      days = 14
+    }
+    status   =  "Enabled"
+  }
+}
+
 # ------------------------------------------------------------------------------
 # S3 bucket to act as the replication source, i.e. the primary copy of the data
 # ------------------------------------------------------------------------------
@@ -162,9 +181,9 @@ resource "aws_s3_bucket" "source" {
     enabled = true
   }
 
-  lifecycle {
-    prevent_destroy = false
-  }
+  // lifecycle {
+  //   prevent_destroy = false
+  // }
 
   force_destroy = true
 
