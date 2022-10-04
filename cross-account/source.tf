@@ -153,7 +153,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "source_lifecycle" {
 }
 
 #---------------------------------------------
-# Move lifecycle out of aws_s3_bucket
+# Move SSE configuration out of aws_s3_bucket
 #---------------------------------------------
 resource "aws_s3_bucket_server_side_encryption_configuration" "source-encryption" {
   provider  =  aws.source
