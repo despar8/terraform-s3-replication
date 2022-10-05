@@ -173,6 +173,7 @@ resource "aws_s3_bucket" "source" {
   provider      = aws.source
   bucket_prefix = var.bucket_prefix
   acl           = "private"
+  force_destroy = true
 
   versioning {
     enabled = true
@@ -181,8 +182,6 @@ resource "aws_s3_bucket" "source" {
   // lifecycle {
   //   prevent_destroy = false
   // }
-
-  force_destroy = true
 
   // server_side_encryption_configuration {
   //   rule {
