@@ -1,0 +1,24 @@
+{
+    "ReplicationConfiguration": {
+        "Role": "arn:aws:iam::961211348833:role/replication",
+        "Rules": [
+            {
+                "ID": "ODhlYjQwODEtMWFmMi00NjIzLTk2YmQtNGUyODY2NTg5NjA0",
+                "Prefix": "dev",
+                "Status": "Enabled",
+                "SourceSelectionCriteria": {
+                    "SseKmsEncryptedObjects": {
+                        "Status": "Enabled"
+                    }
+                },
+                "Destination": {
+                    "Bucket": "arn:aws:s3:::spf-test20221004222345732600000001",
+                    "Account": "541420744399",
+                    "EncryptionConfiguration": {
+                        "ReplicaKmsKeyID": "arn:aws:kms:us-west-2:541420744399:key/8b664ca4-fc9b-4186-82e6-18739f157ac5"
+                    }
+                }
+            }
+        ]
+    }
+}

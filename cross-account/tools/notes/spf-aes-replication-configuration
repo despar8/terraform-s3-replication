@@ -1,0 +1,24 @@
+{
+    "ReplicationConfiguration": {
+        "Role": "arn:aws:iam::961211348833:role/addepar-schema-per-firm-primary-replication",
+        "Rules": [
+            {
+                "ID": "MDg1YzNhMjQtZDM2YS00MWZjLThhZTctZjI2ZjkzMTVlMmUy",
+                "Prefix": "dev",
+                "Status": "Enabled",
+                "SourceSelectionCriteria": {
+                    "SseKmsEncryptedObjects": {
+                        "Status": "Enabled"
+                    }
+                },
+                "Destination": {
+                    "Bucket": "arn:aws:s3:::cal-replica-addepar-schema-per-firm-staging",
+                    "Account": "017204733299",
+                    "EncryptionConfiguration": {
+                        "ReplicaKmsKeyID": "arn:aws:kms:us-west-2:017204733299:key/61276465-7574-46b4-be1b-f790a8665afd"
+                    }
+                }
+            }
+        ]
+    }
+}
