@@ -1,0 +1,13 @@
+SOURCE_BUCKET="$1"
+SOURCE_REP_ROLE="$2"
+ENV="$3"
+
+aws s3api get-bucket-encryption --bucket ${SOURCE_BUCKET}  --profile ${ENV} 
+
+aws s3api get-bucket-replication  --bucket ${SOURCE_BUCKET}  --profile  ${ENV}
+
+aws iam get-role --role ${SOURCE_REP_ROLE}  --profile  ${ENV}
+
+aws iam get-policies --role ${SOURCE_REP_ROLE}  --profile  ${ENV}
+
+# aws iam get-policy --policy-arn arn:aws:iam::961211348833:policy/addepar-schema-per-firm-primary-replication
